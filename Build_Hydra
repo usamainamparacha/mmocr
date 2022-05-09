@@ -1,0 +1,34 @@
+# ======================================
+# | OPENMMLAB's MMOCR INFERENCE SERVER |
+# ======================================
+#
+# This Dockerfile is used to build inference server for OpenMMLab's MMOCR.
+#
+# Quick Command to Build Server
+# =============================
+# docker build -t mmocr:server -f Build_Hydra .
+#
+# Quick Command to Run Inference Server
+# =====================================
+# docker run --rm -it --gpus all 
+#     -p [ Your Port to Expose Server ]:4321 \
+#     mmocr:server [ Your Arguments ]
+#
+# Main Build Script
+# =================
+#
+# Pull nvcr.io/nvidia/pytorch:22.02-py3 Image from NVIDIA-NGC
+FROM nvcr.io/nvidia/pytorch@sha256:a66869fcfb7203ca6be9f793bc1f2dce946ed6569b728422db8503172542f574
+# Install Necessary Packages
+RUN apt-get update
+RUN apt-get install -y libgl1-mesa-dev
+RUN pip3 install grpcio
+RUN pip3 install grpcio-tools
+RUN pip3 install openmim
+RUN mim install mmocr
+# Copy Resources to Respective Directories
+RUN ../MMOCR /workspace/MMOCR/
+WORKDIR /workspace/MMOCR
+# Set Permissions & Create Execution Entrypoint
+RUN chmod 777 ./hydra.py
+ENTRYPOINT [ "./hydra.py" ]

@@ -579,6 +579,8 @@ class MMOCR:
     # Post processing function for end2end ocr
     def det_recog_pp(self, result):
         final_results = []
+        final_images = []
+        final_detections = []
         args = self.args
         for arr, output, export, det_recog_result in zip(
                 args.arrays, args.output, args.export, result):
@@ -586,10 +588,13 @@ class MMOCR:
                 if self.kie_model:
                     res_img = det_recog_show_result(arr, det_recog_result)
                 else:
+                    final_detections.append(det_recog_result)
                     res_img = det_recog_show_result(
                         arr, det_recog_result, out_file=output)
+                    final_images.append(res_img)
                 if args.imshow and not self.kie_model:
-                    mmcv.imshow(res_img, 'inference results')
+                    None
+                    # mmcv.imshow(res_img, 'inference results')
             if not args.details:
                 simple_res = {}
                 simple_res['filename'] = det_recog_result['filename']
@@ -604,7 +609,7 @@ class MMOCR:
             if args.print_result:
                 print(final_result, end='\n\n')
             final_results.append(final_result)
-        return final_results
+        return final_results, final_detections, final_images
 
     # Post processing function for separate det/recog inference
     def single_pp(self, result, model):
