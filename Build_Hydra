@@ -26,9 +26,9 @@ RUN pip3 install grpcio
 RUN pip3 install grpcio-tools
 RUN pip3 install openmim
 RUN mim install mmocr
-# Copy Resources to Respective Directories
-RUN ../MMOCR /workspace/MMOCR/
-WORKDIR /workspace/MMOCR
+# Download Resources to Respective Directories
+RUN git clone https://github.com/codeadeel/mmocr.git
+WORKDIR /workspace/mmocr
 # Set Permissions & Create Execution Entrypoint
 RUN chmod 777 ./hydra.py
 ENTRYPOINT [ "./hydra.py" ]
