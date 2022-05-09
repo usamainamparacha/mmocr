@@ -91,6 +91,7 @@ class mmocr_service(communication_pb2_grpc.mmocr_serviceServicer):
         st = time.time()
         print(inp_data)
         out_simple, out_dict, res_img = seg_ocr.readtext(inp_data, print_result=False, imshow=True)
+        print('Output: ', out_simple)
         """
         out_simple -> Simplified Output Dictionary
         out_dict -> Comprehensive Output Dictionary
@@ -129,7 +130,7 @@ if __name__ == '__main__':
     """)
     server_opts = [('grpc.max_send_message_length', args['msg_len']), ('grpc.max_receive_message_length', args['msg_len'])]
     server = grpc.server(futures.ThreadPoolExecutor(max_workers = args['workers']), options = server_opts)
-    communication_pb2_grpc.add_scbrServicer_to_server(mmocr_service(), server)
+    communication_pb2_grpc.add_mmocr_serviceServicer_to_server(mmocr_service(), server)
     server.add_insecure_port(args['server_ip'])
     server.start()
     try:
