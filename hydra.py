@@ -89,7 +89,6 @@ class mmocr_service(communication_pb2_grpc.mmocr_serviceServicer):
         inp_data, client_id = self.__request_processor(request)
         print(f'Client ID: {client_id}')
         st = time.time()
-        print(inp_data)
         out_simple, out_dict, res_img = seg_ocr.readtext(inp_data, print_result=False, imshow=True)
         print('Output: ', out_simple)
         """

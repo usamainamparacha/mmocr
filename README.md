@@ -146,7 +146,37 @@ pip3 install -e .
 
 ## Get Started
 
-Please see [Getting Started](https://mmocr.readthedocs.io/en/latest/getting_started.html) for the basic usage of MMOCR.
+To build inference server, please using following in terminal:
+
+```bash
+docker build -t mmocr:hydra -f Build_Hydra .
+```
+
+#### NOTE: Building Server Requires NVIDIA Runtime During Build
+
+To run inference server, please use following in terminal:
+
+```bash
+docker run [--rm] -it --gpus all -p [ Your Port to Expose Server ]:4321 mmocr:hydra [ Your Arguments ]
+```
+
+To build inference client, please use following in terminal:
+
+```bash
+docker build -t mmocr:tentacle -f Build_Tentacle .
+```
+
+You can run inference client as your choice. Sample usage is following:
+
+```python
+from tentacle import *
+
+server_ip = '0.0.0.0:4321'
+infer = mmocr_ocr(server_ip)
+
+pil_images = [PIL_Image_1, PIL_Image_2, PIL_Image_3, PIL_Image_4, ...]
+result = infer(pil_images)
+```
 
 ## Contributing
 

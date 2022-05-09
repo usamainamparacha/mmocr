@@ -26,8 +26,9 @@ RUN pip3 install grpcio
 RUN pip3 install grpcio-tools
 RUN pip3 install numpy
 # Copy Resources to Respective Directories
+WORKDIR /home
 COPY ./communication_pb2_grpc.py ./communication_pb2_grpc.py
 COPY ./communication_pb2.py ./communication_pb2.py
-COPY ./tentacle.py ./tenticle.py
+COPY ./tentacle.py ./tentacle.py
 # Start Bash
 CMD [ "bash" ]
