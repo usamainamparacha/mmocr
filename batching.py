@@ -4,6 +4,9 @@ import pandas as pd
 from tentacle import *
 from utils import connect_to_mongo, push_to_mongo
 from ast import literal_eval
+from flask import Flask, request, jsonify
+import json
+app = Flask(__name__)
 
 
 TEST_IMG_DIR = '/home/haris/test_frames'
@@ -25,17 +28,39 @@ def unpack_cols(result):
   return df_final
 
 
+def infer(batch_dict):
+  images = []
+  for image_path in batch_dict:
 
-if __name__ == '__main__':
-    server_ip = '10.10.56.184:4321'
-    infer = mmocr_ocr(server_ip)
-    pil_img_list = list()
-    os.chdir(TEST_IMG_DIR)
-    for i in os.listdir(os.getcwd()):
-        pil_img_list.append(Image.open(i).resize((852, 480)))
-    result = infer(pil_img_list)
-    final = unpack_cols(result)
-    client = connect_to_mongo('10.10.56.115:27017')
-    push_to_mongo(client, final, 'OLTP', 'mmocr')
+        images.append(Image.open(image_path).resize((852, 480)))
+  
+  server_ip = '10.10.56.184:4321'
+  infer = mmocr_ocr(server_ip)
+  result = infer(images)
+  return result
+  
+    
+
+        
+@app.route('/infer_mmocr', methods = ['POST'])
+def main_infer():
+    json_data = request.json
+    result = infer(json_data)
+    return result
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0', port=9002)
+    #server_ip = '10.10.56.184:4321'
+    #infer = mmocr_ocr(server_ip)
+    # pil_img_list = list()
+    # os.chdir(TEST_IMG_DIR)
+    # for i in os.listdir(os.getcwd()):
+    #     pil_img_list.append(Image.open(i).resize((852, 480)))
+    # result = infer(pil_img_list)
+    # final = unpack_cols(result)
+    # client = connect_to_mongo('10.10.56.115:27017')
+    # push_to_mongo(client, final, 'OLTP', 'mmocr')
 
     print(-1)
