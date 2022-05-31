@@ -62,5 +62,3 @@ if __name__ == "__main__":
     # final = unpack_cols(result)
     # client = connect_to_mongo('10.10.56.115:27017')
     # push_to_mongo(client, final, 'OLTP', 'mmocr')
-
-    print(-1)
