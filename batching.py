@@ -24,15 +24,20 @@ def unpack_cols(result):
   df_merged_dicts = df['result'].apply(lambda x: merge_dictionary_list(x))
   frame_inferlist = df_merged_dicts.tolist()
   fdf = merge_dictionary_list(frame_inferlist)
-  df_final = pd.DataFrame(fdf)
+  df_final = fdf
+  #df_final = pd.DataFrame(fdf)
   return df_final
 
 
 def infer(batch_dict):
+
+  #print(batch_dict)
+
   images = []
   for image_path in batch_dict:
 
-        images.append(Image.open(image_path).resize((852, 480)))
+    print(batch_dict[image_path])
+    images.append(Image.open(batch_dict[image_path]).resize((852, 480)))
   
   server_ip = '10.10.56.184:4321'
   infer = mmocr_ocr(server_ip)
@@ -46,7 +51,23 @@ def infer(batch_dict):
 def main_infer():
     json_data = request.json
     result = infer(json_data)
-    return result
+    
+    #print("Printing Result:  ")
+    #print(result)
+    
+    #print(result[0]['result'])
+    
+    
+    
+    #print("I am here")
+    #final = unpack_cols(result)
+    
+    #client = connect_to_mongo('10.10.56.115:27017')
+    #push_to_mongo(client, final, 'OLTP', 'mmocr')
+    
+    
+    
+    return result[0]
 
 
 
