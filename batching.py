@@ -39,7 +39,7 @@ def infer(batch_dict):
     print(batch_dict[image_path])
     images.append(Image.open(batch_dict[image_path]).resize((852, 480)))
   
-  server_ip = '10.10.56.184:4321'
+  server_ip = '172.17.0.3:4321' # HYDRA SERVER IP or MMOCR SERVER IP
   infer = mmocr_ocr(server_ip)
   result = infer(images)
   return result

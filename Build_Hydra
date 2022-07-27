@@ -29,6 +29,9 @@ RUN mim install mmocr
 # Download Resources to Respective Directories
 RUN git clone https://github.com/codeadeel/mmocr.git
 WORKDIR /workspace/mmocr
+
+RUN pip3 install mmcv-full==1.4.8
+
 # Set Permissions & Create Execution Entrypoint
 RUN chmod 777 ./hydra.py
 ENTRYPOINT [ "./hydra.py" ]
